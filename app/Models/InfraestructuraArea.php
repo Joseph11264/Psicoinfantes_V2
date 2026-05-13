@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class InfraestructuraArea extends Model
 {
     use HasFactory;
-
+    use SoftDeletes;
     // Especificamos la tabla si Laravel no la pluraliza correctamente
     protected $table = 'infraestructura_areas';
 

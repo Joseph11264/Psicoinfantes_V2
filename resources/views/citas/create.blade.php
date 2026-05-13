@@ -68,6 +68,13 @@
                 </select>
             </div>
 
+            <div class="md:col-span-2 mt-4 border-t pt-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Motivo de Consulta / Patología Presuntiva (Opcional)</label>
+                <input type="text" name="patologia_inicial" placeholder="Ej: Trastorno del Espectro Autista (TEA), TDAH, Dislalia..." 
+                       class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5 border bg-white">
+                <p class="text-xs text-gray-500 mt-1">Esta información alimentará los reportes gerenciales de la clínica.</p>
+            </div>
+
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Fecha Programada</label>
                 <input type="date" name="fecha_cita" required value="{{ old('fecha_cita') }}"

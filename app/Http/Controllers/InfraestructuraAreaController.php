@@ -7,28 +7,42 @@ use Illuminate\Http\Request;
 
 class InfraestructuraAreaController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $areas = InfraestructuraArea::all();
         return view('areas.index', compact('areas'));
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $request->validate([
-            'nombre_area' => 'required|string|max:100',
+            'nombre_area' => 'required|string|max:150',
             'nivel_estimulo' => 'required|string|max:50',
         ]);
 
-        // Capturamos los datos y verificamos el checkbox
-        $data = $request->all();
-        $data['disponibilidad'] = $request->has('disponibilidad');
-
-        InfraestructuraArea::create($data);
-        return redirect()->route('areas.index')->with('success', 'Área de infraestructura registrada.');
+        InfraestructuraArea::create($request->all());
+        return redirect()->route('areas.index')->with('success', 'Nueva área registrada en la clínica.');
     }
 
-    public function destroy($id) {
-        $area = InfraestructuraArea::findOrFail($id);
+    public function edit(InfraestructuraArea $area)
+    {
+        return view('areas.edit', compact('area'));
+    }
+
+    public function update(Request $request, InfraestructuraArea $area)
+    {
+        $request->validate([
+            'nombre_area' => 'required|string|max:150',
+            'nivel_estimulo' => 'required|string|max:50',
+        ]);
+
+        $area->update($request->all());
+        return redirect()->route('areas.index')->with('success', 'Datos del área actualizados correctamente.');
+    }
+
+    public function destroy(InfraestructuraArea $area)
+    {
         $area->delete();
-        return redirect()->route('areas.index')->with('success', 'Área eliminada del sistema.');
+        return redirect()->route('areas.index')->with('success', 'El área ha sido inhabilitada para nuevas citas.');
     }
 }

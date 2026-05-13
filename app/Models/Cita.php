@@ -2,35 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Cita extends Model
 {
-    use HasFactory;
+    protected $fillable = ['paciente_id', 'especialista_id', 'area_id', 'fecha_cita', 'hora_cita', 'estado'];
 
-    protected $fillable = [
-        'fecha_cita',
-        'hora_cita',
-        'paciente_id',
-        'especialista_id',
-        'area_id',
-        'estado'
-    ];
-
-    // Relaciones (Claves Foráneas)
+    // Forzamos a Laravel a buscar también entre los registros inhabilitados
     public function paciente()
     {
-        return $this->belongsTo(Paciente::class);
+        return $this->belongsTo(Paciente::class)->withTrashed();
     }
 
     public function especialista()
     {
-        return $this->belongsTo(Especialista::class);
+        return $this->belongsTo(Especialista::class)->withTrashed();
     }
 
     public function area()
     {
-        return $this->belongsTo(InfraestructuraArea::class, 'area_id');
+        return $this->belongsTo(InfraestructuraArea::class)->withTrashed();
     }
 }

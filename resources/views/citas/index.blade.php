@@ -39,16 +39,25 @@
                     {{ $cita->area->nombre_area }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-center">
-                    @if($cita->estado == 'Programada')
-                        <a href="{{ route('citas.facturar', $cita->id) }}" class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800 hover:bg-blue-200">
-                            Facturar Ahora
-                        </a>
+                                        
+                    @if($cita->estado === 'Facturada')
+                        @php $factura = \App\Models\Factura::where('cita_id', $cita->id)->first(); @endphp
+                        
+                        @if($factura)
+                            <a href="{{ route('facturas.show', $factura->id) }}" 
+                            class="bg-blue-100 text-blue-700 hover:bg-blue-200 px-3 py-1 rounded-full text-xs font-bold uppercase border border-blue-200 transition-colors">
+                                Ver Factura
+                            </a>
+                        @endif
                     @else
-                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800">
-                            {{ $cita->estado }}
-                        </span>
+                        <a href="{{ route('citas.facturar', $cita->id) }}" 
+                        class="bg-green-100 text-green-700 hover:bg-green-200 px-3 py-1 rounded-full text-xs font-bold uppercase border border-green-200">
+                            Cobrar
+                        </a>
                     @endif
+                    
                 </td>
+                
             </tr>
             @endforeach
         </tbody>
@@ -56,5 +65,15 @@
     @if($citas->isEmpty())
         <div class="p-10 text-center text-gray-400">No hay citas programadas para hoy.</div>
     @endif
+
+    <div class="flex gap-2">
+        <a href="{{ route('reportes.asistencia') }}" target="_blank" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all">
+            🖨️ Imprimir Asistencia de Hoy
+        </a>
+        <a href="{{ route('citas.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all">
+            + Agendar Cita
+        </a>
+    </div>
+
 </div>
 @endsection

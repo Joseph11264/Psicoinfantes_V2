@@ -33,14 +33,25 @@
             </div>
             
             <div class="mb-4">
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Especialidad</label>
-                <select name="especialidad" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border bg-gray-50">
-                    <option value="">Seleccione una especialidad...</option>
-                    <option value="Psicología Infantil">Psicología Infantil</option>
-                    <option value="Terapia del Lenguaje">Terapia del Lenguaje</option>
-                    <option value="Psicopedagogía">Psicopedagogía</option>
-                    <option value="Terapia Ocupacional">Terapia Ocupacional</option>
-                </select>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Especialidades (Puede marcar varias)</label>
+                <div class="space-y-2 bg-gray-50 p-3 rounded-md border border-gray-200 text-sm">
+                    <label class="flex items-center cursor-pointer">
+                        <input type="checkbox" name="especialidad[]" value="Psicología Infantil" class="mr-2 rounded text-blue-600 focus:ring-blue-500">
+                        Psicología Infantil
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                        <input type="checkbox" name="especialidad[]" value="Terapia del Lenguaje" class="mr-2 rounded text-blue-600 focus:ring-blue-500">
+                        Terapia del Lenguaje
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                        <input type="checkbox" name="especialidad[]" value="Psicopedagogía" class="mr-2 rounded text-blue-600 focus:ring-blue-500">
+                        Psicopedagogía
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                        <input type="checkbox" name="especialidad[]" value="Terapia Ocupacional" class="mr-2 rounded text-blue-600 focus:ring-blue-500">
+                        Terapia Ocupacional
+                    </label>
+                </div>
             </div>
             
             <div class="mb-5">
@@ -76,19 +87,29 @@
                             <div class="text-sm font-bold text-gray-900">{{ $esp->nombre_esp }}</div>
                             <div class="text-xs text-gray-500">C.I: {{ $esp->cedula_esp }}</div>
                         </td>
-                        <td class="px-4 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                {{ $esp->especialidad }}
-                            </span>
-                            <div class="text-xs text-gray-500 mt-1">Rol: {{ $esp->rol_sistema }}</div>
+                        <td class="px-4 py-4">
+                            <div class="flex flex-wrap gap-1">
+                                @foreach(explode(', ', $esp->especialidad) as $etiqueta)
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                        {{ trim($etiqueta) }}
+                                    </span>
+                                @endforeach
+                            </div>
+                            <div class="text-xs text-gray-500 mt-2">Rol: {{ $esp->rol_sistema }}</div>
                         </td>
                         <td class="px-4 py-4 whitespace-nowrap text-center text-sm font-medium">
-                            <button class="text-indigo-600 hover:text-indigo-900 mr-3 font-semibold">Editar</button>
-                            <form action="{{ route('especialistas.destroy', $esp->id) }}" method="POST" class="inline-block" onsubmit="return confirm('¿Eliminar a este especialista del sistema?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:text-red-800 font-semibold">Eliminar</button>
-                            </form>
+                            <div class="flex justify-center items-center gap-3">
+                                <a href="{{ route('especialistas.edit', $esp->id) }}" 
+                                   class="bg-amber-100 text-amber-700 hover:bg-amber-200 px-3 py-1 rounded-full text-xs font-bold uppercase border border-amber-200 transition-colors">
+                                    Editar
+                                </a>
+
+                                <form action="{{ route('especialistas.destroy', $esp->id) }}" method="POST" class="inline-block" onsubmit="return confirm('¿Está seguro de inhabilitar a este especialista? Sus datos se ocultarán del sistema pero no se borrarán.');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-500 hover:text-red-800 font-bold text-xs uppercase pt-1">Inhabilitar</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @endforeach

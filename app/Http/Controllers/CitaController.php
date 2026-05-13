@@ -51,6 +51,15 @@ class CitaController extends Controller
     // 3. Guardar
     Cita::create($request->all());
 
-    return redirect()->route('citas.index')->with('success', 'Cita agendada exitosamente para hoy.');
+    if ($request->filled('patologia_inicial')) {
+            \App\Models\Diagnostico::create([
+                'paciente_id' => $request->paciente_id,
+                'patologia' => $request->patologia_inicial,
+                'derivacion' => 'Derivado a especialista en ' . \App\Models\InfraestructuraArea::find($request->area_id)->nombre_area,
+                'fecha_emision' => date('Y-m-d')
+            ]);
+        }
+
+        return redirect()->route('citas.index')->with('success', 'Cita agendada exitosamente.');
     }
 }
